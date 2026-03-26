@@ -1,36 +1,34 @@
-# 8-bit ALU in Verilog
+# 8-bit ALU — Verilog HDL
 
-This project implements an **8-bit Arithmetic Logic Unit (ALU)** using **Verilog HDL**.
-The ALU supports basic arithmetic and logical operations and is verified through simulation using **Icarus Verilog** and **GTKWave**.
-
----
-
-## Features
-
-* 8-bit input operands
-* 3-bit opcode control
-* Combinational ALU design
-* Verilog testbench for verification
-* Waveform-based simulation analysis
+A synthesizable **8-bit Arithmetic Logic Unit** implemented in Verilog, supporting 8 operations via a 3-bit opcode. Verified through simulation with **Icarus Verilog** and **GTKWave**.
 
 ---
 
-## Operations Supported
+## Operations
 
-| Opcode | Operation | Description                 |
-| ------ | --------- | --------------------------- |
-| 000    | ADD       | Addition of two operands    |
-| 001    | SUB       | Subtraction of two operands |
-| 010    | AND       | Bitwise AND                 |
-| 011    | OR        | Bitwise OR                  |
+| Opcode | Operation | Expression     | Description         |
+|--------|-----------|----------------|---------------------|
+| `000`  | ADD       | `a + b`        | Addition            |
+| `001`  | SUB       | `a - b`        | Subtraction         |
+| `010`  | AND       | `a & b`        | Bitwise AND         |
+| `011`  | OR        | `a \| b`       | Bitwise OR          |
+| `100`  | XOR       | `a ^ b`        | Bitwise XOR         |
+| `101`  | NOT       | `~a`           | Bitwise NOT (a)     |
+| `110`  | SHL       | `a << 1`       | Logical shift left  |
+| `111`  | SHR       | `a >> 1`       | Logical shift right |
 
 ---
 
-## Tools Used
+## Module Interface
 
-* **Verilog HDL** – hardware description language
-* **Icarus Verilog** – Verilog compiler and simulator
-* **GTKWave** – waveform viewer
+```verilog
+module alu (
+    input  [7:0] a,       // Operand A
+    input  [7:0] b,       // Operand B
+    input  [2:0] op,      // Operation select
+    output reg [7:0] result
+);
+```
 
 ---
 
@@ -38,37 +36,33 @@ The ALU supports basic arithmetic and logical operations and is verified through
 
 ```
 verilog-8bit-alu/
-├── src/                # Verilog design files
-│   └── alu.v
-│
-├── tb/                 # Testbench
-│   └── alu_tb.v
-│
-├── waveform/           # Simulation waveform screenshot
-│   └── alu_waveform.png
-│
+├── src/
+│   └── alu.v             # ALU design (combinational)
+├── tb/
+│   └── alu_tb.v          # Testbench
+├── waveform/
+│   └── alu_waveform.png  # GTKWave simulation result
 └── README.md
 ```
 
 ---
 
-## How to Run Simulation
+## Simulation
 
-### Compile
+### Requirements
+- [Icarus Verilog](http://iverilog.icarus.com/)
+- [GTKWave](http://gtkwave.sourceforge.net/)
+
+### Steps
 
 ```bash
+# 1. Compile
 iverilog -o alu_tb tb/alu_tb.v src/alu.v
-```
 
-### Run simulation
-
-```bash
+# 2. Run simulation
 vvp alu_tb
-```
 
-### Open waveform
-
-```bash
+# 3. View waveform
 gtkwave alu.vcd
 ```
 
@@ -76,34 +70,38 @@ gtkwave alu.vcd
 
 ## Simulation Waveform
 
-The waveform below shows the verification of ALU operations.
-
 ![Waveform](waveform/alu_waveform.png)
 
 ---
 
-## Example Test Case
+## Example Test Cases
 
-Inputs:
+With `a = 0x0A (10)`, `b = 0x05 (5)`:
 
-```
-a = 10 (0x0A)
-b = 5  (0x05)
-```
+| Operation | Result        |
+|-----------|---------------|
+| ADD       | `0x0F` (15)   |
+| SUB       | `0x05` (5)    |
+| AND       | `0x00` (0)    |
+| OR        | `0x0F` (15)   |
+| XOR       | `0x0F` (15)   |
+| NOT       | `0xF5` (245)  |
+| SHL       | `0x14` (20)   |
+| SHR       | `0x05` (5)    |
 
-Results:
+---
 
-| Operation | Result    |
-| --------- | --------- |
-| ADD       | 15 (0x0F) |
-| SUB       | 5  (0x05) |
-| AND       | 0  (0x00) |
-| OR        | 15 (0x0F) |
+## Tools
+
+| Tool           | Purpose                    |
+|----------------|----------------------------|
+| Verilog HDL    | Hardware description       |
+| Icarus Verilog | Compilation & simulation   |
+| GTKWave        | Waveform visualization     |
 
 ---
 
 ## Author
 
-**Ho Minh Thao**
-Electronics & Telecommunications Engineering Student
-Interested in **Digital IC Design / VLSI / RTL Design**
+**Ho Minh Thao** — Electronics & Telecommunications Engineering Student  
+Interested in Digital IC Design · VLSI · RTL Design
